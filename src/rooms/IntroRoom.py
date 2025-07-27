@@ -1,11 +1,18 @@
 from Room import *
+from pathlib import Path
+import pygame
 
 class IntroRoom(Room):
-    def on_enter_room(self):
-        print('Room entered')
+    font = None
+
+    def on_create_room(self):
+        self.font = pygame.font.Font((Path(__file__).parent / '..' / 'res' / 'fonts' / 'Minecraft.ttf').resolve() , 32)
+
+    def update(self, dt):
+        pass
     
-    def on_leave_room(self):
-        print('Room leaved')
-    
-    def on_destroy_room(self):
-        print('Room destroyed')
+    def render(self, surface):
+        surface.blit(self.font.render('Hola mundo!', False, (125, 0, 0)), (105, 105))
+        surface.blit(self.font.render('Hola mundo!', False, (255, 255, 255)), (100, 100))
+
+

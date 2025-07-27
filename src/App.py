@@ -2,6 +2,7 @@ import pygame
 import sys
 from rooms.rooms import ROOMS
 
+# Valores iniciales
 INITIAL_ROOM = 'intro'
 SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 500
@@ -17,6 +18,8 @@ class App:
     exit_error = None
     screen_width = SCREEN_WIDTH
     screen_height = SCREEN_HEIGHT
+    screen = None
+    clock = None
 
     def load_room(self, name):
         self.id_incremental += 1
@@ -34,7 +37,7 @@ class App:
         del self.rooms[name]
 
         if name == self.current_room_id:
-            self.exit_error = 'Habitacion actual eliminada'
+            self.exit_error = 'ERROR: Habitacion actual eliminada'
             self.is_running = False
     
     def change_room(self, new):
@@ -53,7 +56,7 @@ class App:
             self.rooms[self.current_room_id].on_leave_room()
 
         if not room_id in self.rooms.keys():
-            self.exit_error = f'La habitacion {room_id} no existe en rooms'
+            self.exit_error = f'ERROR: La habitacion {room_id} no existe en rooms'
             self.is_running = False
 
         self.current_room_id = room_id
@@ -63,16 +66,18 @@ class App:
 
     def init(self):
         pygame.init()
-        pygame.display.set_mode((self.screen_width, self.screen_height))
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.FULLSCREEN)
         pygame.display.set_caption(TITLE)
-
+        self.clock = pygame.time.Clock()
         self.change_room(INITIAL_ROOM)
     
-    def update(self):
-        self.rooms[self.current_room_id].update()
+    def update(self, dt):
+        self.rooms[self.current_room_id].update(dt)
 
-    def render(self):
-        self.rooms[self.current_room_id].render()
+    def render(self, surface):
+        surface.fill((60, 0, 0))
+        self.rooms[self.current_room_id].render(surface)
+        pygame.display.flip()
     
     def handle_events(self):
         for event in pygame.event.get():
@@ -90,9 +95,10 @@ class App:
         self.init()
         
         while self.is_running:
+            dt = self.clock.tick(self.fps)
             self.handle_events()
-            self.update()
-            self.render()
+            self.update(dt)
+            self.render(self.screen)
         
         if self.exit_error:
             print('ERROR:', self.exit_error)
