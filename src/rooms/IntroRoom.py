@@ -6,6 +6,8 @@ import pygame
 class IntroRoom(Room):
     font = None
     intro_timer = None
+    x = 0
+    y = 0
 
     def on_timeout(self):   
         print('timeout')
@@ -19,9 +21,8 @@ class IntroRoom(Room):
         
 
     def update(self, dt):
-        pass
-    
+        self.x += 0.5
+        self.y += 0.5
+
     def render(self, surface):
-        surface.blit(self.font.render('Baile Py', False, (125, 0, 0)), (105, 105))
-
-
+    	surface.blit(self.font.render('Desarrollado por Nmaker19 y Technolobito', False, (125, 0, 0)), (self.x, self.y))
