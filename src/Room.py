@@ -1,13 +1,17 @@
 
 class Room:
     room_id = None
+    app = None
+
+    def __init__(self, app):
+        self.app = app
 
     # Actualizar
-    def update(self):
+    def update(self, dt):
         pass
 
     # Dibujar
-    def render(self):
+    def render(self, surface):
         pass
 
     # Cuando se crea la habitacion
@@ -25,3 +29,4 @@ class Room:
     # Cuando se destruye la habitacion
     def on_destroy_room(self):
         pass
+

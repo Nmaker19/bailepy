@@ -4,8 +4,8 @@ from rooms.HomeRoom import *
 from rooms.IntroRoom import *
 
 ROOMS = {
-    'menu': AfterGameRoom,
+    'menu': HomeRoom,
     'game': GameRoom,
-    'lose': HomeRoom,
+    'after': AfterGameRoom,
     'intro': IntroRoom
 }

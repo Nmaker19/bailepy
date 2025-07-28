@@ -1,5 +1,6 @@
 import pygame
 import sys
+from pathlib import Path
 from rooms.rooms import ROOMS
 
 # Valores iniciales
@@ -7,6 +8,7 @@ INITIAL_ROOM = 'intro'
 SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 500
 TITLE = 'BailePy'
+ROOT_PATH = (Path(__file__) / '..' / '..').absolute().resolve()
 
 
 class App:
@@ -20,11 +22,14 @@ class App:
     screen_height = SCREEN_HEIGHT
     screen = None
     clock = None
+    ROOT = Path(ROOT_PATH)
+    SRC = Path(ROOT_PATH) / 'src'
+    RES = Path(ROOT_PATH) / 'src' / 'res'
 
     def load_room(self, name):
         self.id_incremental += 1
         key = self.id_incremental
-        self.rooms[key] = ROOMS[name]()
+        self.rooms[key] = ROOMS[name](self)
         self.rooms[key].room_id = key
         self.rooms[key].on_create_room()
         return key
@@ -75,7 +80,7 @@ class App:
         self.rooms[self.current_room_id].update(dt)
 
     def render(self, surface):
-        surface.fill((60, 0, 0))
+        surface.fill((0, 0, 0))
         self.rooms[self.current_room_id].render(surface)
         pygame.display.flip()
     
