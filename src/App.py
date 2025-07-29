@@ -25,6 +25,9 @@ class App:
     ROOT = Path(ROOT_PATH)
     SRC = Path(ROOT_PATH) / 'src'
     RES = Path(ROOT_PATH) / 'src' / 'res'
+    key_down = {}
+    key_released = {}
+    key_pressed = {}
 
     def load_room(self, name):
         self.id_incremental += 1
@@ -85,10 +88,18 @@ class App:
         pygame.display.flip()
     
     def handle_events(self):
+        self.key_down = {}
+        self.key_pressed = pygame.key.get_pressed()
+        self.key_up = {}
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.is_running = False
-            
+            elif event.type == pygame.KEYDOWN:
+                self.key_down[event.key] = True
+            elif event.type == pygame.KEYUP:
+                self.key_up[event.key] = True
+
     def quit(self):
         if self.current_room_id:
             self.delete_room(self.current_room_id)
@@ -102,7 +113,7 @@ class App:
         while self.is_running:
             dt = self.clock.tick(self.fps)
             self.handle_events()
-            self.update(dt)
+            self.update(dt * 0.001)
             self.render(self.screen)
         
         if self.exit_error:
